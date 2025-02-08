@@ -5,9 +5,11 @@
 
 class SocketHandler {
   Main &parent;
-  
+  const int PORT = 8080;
+  std::string packet;
+   
   void buffer_unload();
-  void send();
+  void send_packet();
   
 public:
   SocketHandler(Main &parent_) : parent(parent_) {};
