@@ -1,6 +1,9 @@
 #include <cctype>
 #include <iostream>
 #include <stdio.h>
+#include <vector>
+#include <utility>
+#include <algorithm>
 
 #include "sender.hh"
 
@@ -26,8 +29,21 @@ bool Sender::is_valid() {
 }
 
 
+void Sender::buffer_load() {
+  cout << "buffer is loaded" << endl;
+}
+
 void Sender::parse_string() {
-  parent.buffer.push({30, '7'}); 
+  vector<pair<int, char>> pairs ;
+  int value;
+  
+  for(string::iterator it = str.begin(); it != str.end(); it++) {
+    value = ranges::count(str, *it);
+    pairs.push_back({value, *it});
+  }
+
+  pairs.erase(unique(pairs.begin(), pairs.end()), pairs.end());
+  sort(pairs.begin(), pairs.end());  
 }
 
 
@@ -36,7 +52,7 @@ void Sender::start() {
     this->get_string();
 
     if (this->is_valid()) {
-      cout << 
+
       this->parse_string();
       
     }

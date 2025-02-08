@@ -12,6 +12,7 @@ class Sender{
   void get_string();
   bool is_valid();
   void parse_string();
+  void buffer_load();
 
 public:
   Sender(Main &parent_) : parent(parent_) {};
