@@ -27,8 +27,9 @@ bool Sender::is_valid() {
 
 
 void Sender::parse_string() {
-  buffer.push({30, '7'}); 
+  parent.buffer.push({30, '7'}); 
 }
+
 
 void Sender::start() {
   while(true) {

@@ -4,14 +4,12 @@
 #include <barrier>
 #include <queue>
 #include <utility>
-#include <thread> 
+
 
 class Main {
-protected:
+public:
   std::barrier<> sync_point;
   std::queue<std::pair<int, char>> buffer;
-
-public:
   Main() : sync_point(2) {}
 };
 
