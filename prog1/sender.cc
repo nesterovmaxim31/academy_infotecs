@@ -30,11 +30,14 @@ bool Sender::is_valid() {
 
 
 void Sender::buffer_load() {
-  cout << "buffer is loaded" << endl;
+  for(vector<pair<int, char>>::iterator it = pairs.begin(); \
+      it != pairs.end(); it++) {
+    parent.buffer.push(*it);
+  }
 }
 
+
 void Sender::parse_string() {
-  vector<pair<int, char>> pairs ;
   int value;
   
   for(string::iterator it = str.begin(); it != str.end(); it++) {
@@ -52,9 +55,8 @@ void Sender::start() {
     this->get_string();
 
     if (this->is_valid()) {
-
       this->parse_string();
-      
+      this->buffer_load();
     }
     else {
       fprintf(stderr, "String doesn't math rules\n");

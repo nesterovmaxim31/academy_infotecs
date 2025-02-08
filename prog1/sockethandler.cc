@@ -7,6 +7,10 @@
 
 using namespace std;
 
+void SocketHandler::buffer_unload() {
+  
+}
+
 void SocketHandler::send() {
   
 }
