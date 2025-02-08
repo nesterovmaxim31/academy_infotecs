@@ -3,16 +3,17 @@
 
 #include <barrier>
 #include <queue>
+#include <utility>
+#include <thread> 
 
 class Main {
-  std::barrier sync_point;
-  std::queue<pair<int, char>> buffer;
+protected:
+  std::barrier<> sync_point;
+  std::queue<std::pair<int, char>> buffer;
 
 public:
-  Main() {
-    sync_point = std::barrier{2};
-  }
+  Main() : sync_point(2) {}
 };
 
 
-#endif MAIN_HH
+#endif

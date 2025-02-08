@@ -5,7 +5,7 @@
 
 #include "main.hh"
 
-class Sender : Main{
+class Sender : private Main{
   std::string str;
 
   void get_string();
@@ -13,7 +13,8 @@ class Sender : Main{
   void parse_string();
 
 public:
-  Sender();
+  //  Sender();
   void start();
 };
 
+#endif
