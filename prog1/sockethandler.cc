@@ -17,5 +17,9 @@ void SocketHandler::send() {
 
 
 void SocketHandler::start() {
-  cout << "Socket Handler start" << endl;
+  while(true) {
+    // wait for first thread to finish input
+    this->buffer_unload();
+    this->send();
+  }
 }

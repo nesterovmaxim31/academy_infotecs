@@ -6,11 +6,12 @@
 class SocketHandler {
   Main &parent;
   
+  void buffer_unload();
+  void send();
   
 public:
   SocketHandler(Main &parent_) : parent(parent_) {};
-  void send();
-  void start();
+  void start();   
 };
 
 
