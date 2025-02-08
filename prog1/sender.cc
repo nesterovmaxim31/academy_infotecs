@@ -36,6 +36,7 @@ void Sender::start() {
     this->get_string();
 
     if (this->is_valid()) {
+      cout << 
       this->parse_string();
       
     }
