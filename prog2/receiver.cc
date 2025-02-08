@@ -2,6 +2,7 @@
 
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <unistd.h>
 
 #include "receiver.hh"
 
@@ -26,8 +27,16 @@ void Receiver::get_packet() {
 
   listen(serverSocket, 5);
 
+ connection:
   int clientSocket = accept(serverSocket, nullptr, nullptr);
 
+  if (clientSocket == -1) {
+    cout << "Error during connection. Try adain in 3 seconds" << endl;
+    sleep(3);
+    goto connection;
+  }
+
+  cout << "connection  succesfull" << endl;
   char buffer[1024] = { 0 };
   recv(clientSocket, buffer, sizeof(buffer), 0);
   cout << "Message from client: " << buffer << endl;

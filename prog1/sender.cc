@@ -42,7 +42,7 @@ void Sender::parse_string() {
   int value;
   
   for(string::iterator it = str.begin(); it != str.end(); it++) {
-a    value = ranges::count(str, *it);
+    value = ranges::count(str, *it);
     pairs.push_back({value, *it});
   }
 
