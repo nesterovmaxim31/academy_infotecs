@@ -20,4 +20,5 @@ int main() {
   thread1.join();
   thread2.join();
 
+  return 0;
 }

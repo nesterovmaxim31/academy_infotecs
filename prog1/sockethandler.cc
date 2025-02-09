@@ -23,9 +23,7 @@ void SocketHandler::buffer_unload() {
   }
 }
 
-void SocketHandler::send_packet() {
-  int connect_status;
-  
+void SocketHandler::send_packet() {  
   int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
 
   sockaddr_in serverAddress;
@@ -33,16 +31,11 @@ void SocketHandler::send_packet() {
   serverAddress.sin_port = htons(PORT);
   serverAddress.sin_addr.s_addr = INADDR_ANY;
 
-  connect_status = (clientSocket, (struct sockaddr*)&serverAddress,
-            sizeof(serverAddress));
-
- connection:
-  if(connect_status != 0) {
+  while (connect(clientSocket, (struct sockaddr*)&serverAddress,
+	  sizeof(serverAddress)) != 0) {
     cout << "Error during connection. Try again in 3 seconds" << endl; 
     sleep(3);
-    goto connection;
   }
-    
 
   send(clientSocket, packet.c_str(), packet.length(), 0);
 
