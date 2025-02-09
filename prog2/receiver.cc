@@ -26,6 +26,7 @@ void Receiver::get_packet() {
   bind(serverSocket, (struct sockaddr*)&serverAddress,
        sizeof(serverAddress));
 
+ reconnect:
   cout << "Wait for connection" << endl;
   listen(serverSocket, 5);
 
@@ -41,15 +42,15 @@ void Receiver::get_packet() {
   cout << "connection  succesfull" << endl;
   char buffer[1024] = { 0 };
 
- newpacket:
-  // cout << "Wait for packet" << endl;
-  memset(buffer, '\0', 1024);
+  int q;
   
-  recv(clientSocket, buffer, sizeof(buffer), 0);
-  if(strlen(buffer) > 1)
-    cout << "Message from client: " << buffer << endl;
-  goto newpacket;
-  
+  while (true) {
+    q = recv(clientSocket, buffer, sizeof(buffer), 0);
+    if(q != 0)
+      cout << "Message from client: " << buffer << endl;
+    else
+      goto reconnect;
+  }
 
   close(serverSocket);
 }

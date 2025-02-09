@@ -21,6 +21,8 @@ void SocketHandler::buffer_unload() {
     el = parent.buffer.front();
 
   }
+
+  packet += "\n\0";
 }
 
 void SocketHandler::send_packet() {  
@@ -37,21 +39,41 @@ void SocketHandler::send_packet() {
     sleep(3);
   }
 
+
   send(clientSocket, packet.c_str(), packet.length(), 0);
 
   close(clientSocket);
 
-  cout << "Packet is sent" << endl;
+
 }
 
 
 void SocketHandler::start() {
-  while(true) {
-    cout << "Wait for string" << endl;
-    // wait for first thread to finish input
+  int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
+
+  sockaddr_in serverAddress;
+  serverAddress.sin_family = AF_INET;
+  serverAddress.sin_port = htons(PORT);
+  serverAddress.sin_addr.s_addr = INADDR_ANY;
+
+ reconnect:
+  while (connect(clientSocket, (struct sockaddr*)&serverAddress,
+		 sizeof(serverAddress)) != 0) {
+    cout << "Error during connection. Try again in 2 seconds" << endl; 
+    sleep(3);
+  }
+  
+  while(true) {    
     parent.sync_point.arrive_and_wait();
     
     this->buffer_unload();
-    this->send_packet();
+    
+    if (send(clientSocket, packet.c_str(), packet.length() + 1,\
+	     0) == -1) {
+      cout << "connection is lost" << endl;
+      goto reconnect;
+    } 
   }
+
+  close(clientSocket);
 }
