@@ -14,12 +14,13 @@ using namespace std;
 void SocketHandler::buffer_unload() {
   pair<int, char> el;
   el = parent.buffer.front();
-  parent.buffer.pop();
+
   
   while(el.first != -1 && !parent.buffer.empty()) {
+    parent.buffer.pop();
     packet += " " + to_string(el.first) + " " + el.second;
     el = parent.buffer.front();
-    parent.buffer.pop();
+
   }
 }
 
@@ -40,6 +41,8 @@ void SocketHandler::send_packet() {
   send(clientSocket, packet.c_str(), packet.length(), 0);
 
   close(clientSocket);
+
+  cout << "Packet is sent" << endl;
 }
 
 

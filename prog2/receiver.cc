@@ -3,6 +3,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <cstring>
 
 #include "receiver.hh"
 
@@ -25,25 +26,38 @@ void Receiver::get_packet() {
   bind(serverSocket, (struct sockaddr*)&serverAddress,
        sizeof(serverAddress));
 
+  cout << "Wait for connection" << endl;
   listen(serverSocket, 5);
 
- connection:
+ 
   int clientSocket = accept(serverSocket, nullptr, nullptr);
 
   if (clientSocket == -1) {
     cout << "Error during connection. Try adain in 3 seconds" << endl;
     sleep(3);
-    goto connection;
+    // goto connection;
   }
 
   cout << "connection  succesfull" << endl;
   char buffer[1024] = { 0 };
+
+ newpacket:
+  // cout << "Wait for packet" << endl;
+  memset(buffer, '\0', 1024);
+  
   recv(clientSocket, buffer, sizeof(buffer), 0);
-  cout << "Message from client: " << buffer << endl;
+  if(strlen(buffer) > 1)
+    cout << "Message from client: " << buffer << endl;
+  goto newpacket;
+  
+
+  close(serverSocket);
 }
 
 
 void Receiver::start() {
-  this->get_packet();
-  this->output_data();
+  while(true) {
+    this->get_packet();
+    this->output_data();
+  }
 }
