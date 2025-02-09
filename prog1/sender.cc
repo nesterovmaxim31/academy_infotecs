@@ -35,6 +35,8 @@ void Sender::buffer_load() {
       it != pairs.end(); it++) {
     parent.buffer.push(*it);
   }
+
+  pairs.clear();
 }
 
 

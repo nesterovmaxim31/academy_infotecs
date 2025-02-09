@@ -14,7 +14,6 @@ using namespace std;
 void SocketHandler::buffer_unload() {
   pair<int, char> el;
   el = parent.buffer.front();
-
   
   while(el.first != -1 && !parent.buffer.empty()) {
     parent.buffer.pop();
