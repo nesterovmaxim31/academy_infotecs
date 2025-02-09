@@ -46,8 +46,10 @@ void Receiver::get_packet() {
   
   while (true) {
     q = recv(clientSocket, buffer, sizeof(buffer), 0);
-    if(q != 0)
+    if(q != 0) {
       cout << "Message from client: " << buffer << endl;
+      bzero(buffer, sizeof(buffer));
+    }
     else
       goto reconnect;
   }

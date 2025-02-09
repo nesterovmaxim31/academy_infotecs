@@ -49,6 +49,7 @@ void SocketHandler::send_packet() {
 
 
 void SocketHandler::start() {
+ reconnect:
   int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
 
   sockaddr_in serverAddress;
@@ -56,20 +57,20 @@ void SocketHandler::start() {
   serverAddress.sin_port = htons(PORT);
   serverAddress.sin_addr.s_addr = INADDR_ANY;
 
- reconnect:
+
   while (connect(clientSocket, (struct sockaddr*)&serverAddress,
 		 sizeof(serverAddress)) != 0) {
     cout << "Error during connection. Try again in 2 seconds" << endl; 
     sleep(3);
   }
-  
+  int q;
   while(true) {    
     parent.sync_point.arrive_and_wait();
     
     this->buffer_unload();
-    
-    if (send(clientSocket, packet.c_str(), packet.length() + 1,\
-	     0) == -1) {
+
+    q = send(clientSocket, packet.c_str(), packet.length() + 1, MSG_NOSIGNAL);
+    if (q == -1) {
       cout << "connection is lost" << endl;
       goto reconnect;
     } 
