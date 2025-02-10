@@ -40,11 +40,11 @@ void SocketHandler::buffer_unload() {
 
   for(vector<pair<int, char>>::iterator it = pairs.begin();	\
       it != pairs.end(); it++) {
-    packet += to_string((*it).first) + " " + (*it).second + "; ";    
+    packet += to_string((*it).first) + " " + (*it).second + " ";    
   }
 
   pairs.clear();
-  packet += "\n";
+  packet += "-1 -1\n";
 }
 
 
