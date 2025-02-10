@@ -48,8 +48,6 @@ void Sender::parse_string() {
     pairs.push_back({value, *it});
   }
   
-  sort(pairs.begin(), pairs.end());  
-  pairs.erase(unique(pairs.begin(), pairs.end()), pairs.end());
 }
 
 

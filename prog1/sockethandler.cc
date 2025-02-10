@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 
 using namespace std;
@@ -13,18 +14,36 @@ using namespace std;
 void SocketHandler::print_queue() {
   cout << "The entered string consists of these characters:" << endl;
   
+  for(vector<pair<int, char>>::iterator it = pairs.begin();\
+      it != pairs.end(); it++) {
+    cout << "Character: " << (*it).second << " количество повторений: "	\
+	 << (*it).first << endl;
+  }
 }
 
+
 void SocketHandler::buffer_unload() {
+  pairs.clear();
   pair<int, char> el;
   el = parent.buffer.front();
   
   while(el.first != -1 && !parent.buffer.empty()) {
+    pairs.push_back({el.first, el.second});
     parent.buffer.pop();
-    packet += to_string(el.first) + " " + el.second + "; ";
     el = parent.buffer.front();
   }
 
+  this->print_queue();
+  
+  sort(pairs.begin(), pairs.end());  
+  pairs.erase(unique(pairs.begin(), pairs.end()), pairs.end());
+
+  for(vector<pair<int, char>>::iterator it = pairs.begin();	\
+      it != pairs.end(); it++) {
+    packet += to_string((*it).first) + " " + (*it).second + "; ";    
+  }
+
+  pairs.clear();
   packet += "\n";
 }
 
