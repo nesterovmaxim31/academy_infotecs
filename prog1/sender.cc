@@ -1,6 +1,5 @@
 #include <cctype>
 #include <iostream>
-#include <stdio.h>
 #include <vector>
 #include <utility>
 #include <algorithm>
@@ -11,7 +10,7 @@
 using namespace std;
 
 void Sender::get_string() {
-  cout << "Enter a string: ";
+  cout << "Enter a string: " << endl;
   getline(cin, str);
 }
 
@@ -59,9 +58,9 @@ void Sender::parse_string() {
 
     if (flag)      
       pairs.push_back({value, *it});
-      
   }
 }
+
 
 void Sender::start() {
   while(true) {
@@ -72,7 +71,7 @@ void Sender::start() {
       this->buffer_load();
     }
     else {
-      fprintf(stderr, "String doesn't math rules\n");
+      cout << "String doesn't math rules" << endl;
       continue;
     }
 

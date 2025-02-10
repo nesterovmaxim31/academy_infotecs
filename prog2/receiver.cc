@@ -11,21 +11,24 @@
 
 using namespace std;
 
-inline bool is_return(const char& input) {
-    return input == '\n' || input == '\r';
+bool is_return(const char& input) {
+  return input == '\n' || input == '\r';
 }
 
 
 string last_line (const string& input) {
-    if(input.length() == 1) return input;
-    size_t position = input.length()-2;
+  if(input.length() == 1)
+    return input;
+
+  size_t position = input.length()-2;
     
-    while((not is_return(input[position])) and position > 0) position--;
+  while((not is_return(input[position])) and position > 0)
+    position--;
 
-    if(is_return(input[position])) position += 1;
+  if(is_return(input[position]))
+    position += 1;
 
-
-    return input.substr(position);
+  return input.substr(position);
 }
 
 
@@ -36,7 +39,6 @@ void Receiver::print_buffer() {
   
   if(newly_created) {
     str = buffer;
-    // cout << buffer;
     newly_created = false;
   }
   else {
@@ -54,10 +56,11 @@ void Receiver::print_buffer() {
   } while(value != -1);
 
   sort(pairs.begin(), pairs.end());  
-  
-  for(vector<pair<int, char>>::iterator it = pairs.begin(); it != pairs.end(); it++) {
-    
-    cout << "Символ: " << (*it).second << ", количество вхождений: " << (*it).first << endl;
+
+  cout << endl << "The entered string consists of these characters: " << endl;
+  for(vector<pair<int, char>>::iterator it = pairs.begin(); \
+      it != pairs.end(); it++) {    
+    cout << "Character: " << (*it).second << ", amount: " << (*it).first << endl;
   }
 
   pairs.clear();
@@ -66,6 +69,7 @@ void Receiver::print_buffer() {
 
 void Receiver::get_packet() {
   int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+  int clientSocket, q;
 
   sockaddr_in serverAddress;
   serverAddress.sin_family = AF_INET;
@@ -78,22 +82,19 @@ void Receiver::get_packet() {
  reconnect:
   cout << "Wait for connection" << endl;
   listen(serverSocket, 5);
-
  
-  int clientSocket = accept(serverSocket, nullptr, nullptr);
+  clientSocket = accept(serverSocket, nullptr, nullptr);
 
   if (clientSocket == -1) {
-    cout << "Error during connection. Try adain in 3 seconds" << endl;
+    cout << endl <<"Error during connection. Try again in 3 seconds" << endl;
     sleep(3);
   }
 
-  cout << "connection  succesfull" << endl;
-
-
-  int q;
+  cout << "Connection  succesfull" << endl;
   
   while (true) {
     q = recv(clientSocket, buffer, sizeof(buffer), 0);
+
     if(q != 0) {
       this->print_buffer();
       bzero(buffer, sizeof(buffer));

@@ -1,12 +1,12 @@
-#include "sockethandler.hh"
-
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <unistd.h>
-#include <cstdio>
+#include <chrono>
+#include <thread>
 #include <iostream>
 #include <string>
 #include <algorithm>
+
+#include "sockethandler.hh"
 
 
 using namespace std;
@@ -16,7 +16,7 @@ void SocketHandler::print_queue() {
   
   for(vector<pair<int, char>>::iterator it = pairs.begin();\
       it != pairs.end(); it++) {
-    cout << "Character: " << (*it).second << " количество повторений: "	\
+    cout << "Character: " << (*it).second << ", amount: "\
 	 << (*it).first << endl;
   }
 }
@@ -24,8 +24,8 @@ void SocketHandler::print_queue() {
 
 void SocketHandler::buffer_unload() {
   pairs.clear();
-  pair<int, char> el;
-  el = parent.buffer.front();
+  
+  pair<int, char> el = parent.buffer.front();
   
   while(el.first != -1 && !parent.buffer.empty()) {
     pairs.push_back({el.first, el.second});
@@ -48,26 +48,6 @@ void SocketHandler::buffer_unload() {
 }
 
 
-void SocketHandler::send_packet() {  
-  int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
-
-  sockaddr_in serverAddress;
-  serverAddress.sin_family = AF_INET;
-  serverAddress.sin_port = htons(PORT);
-  serverAddress.sin_addr.s_addr = INADDR_ANY;
-
-  while (connect(clientSocket, (struct sockaddr*)&serverAddress,
-	  sizeof(serverAddress)) != 0) {
-    fprintf(stderr,"Error during connection. Try again in 3 seconds\n"); 
-    sleep(3);
-  }
-
-  send(clientSocket, packet.c_str(), packet.length(), 0);
-
-  close(clientSocket);
-}
-
-
 void SocketHandler::start() {
   int q, clientSocket;
   sockaddr_in serverAddress;
@@ -82,8 +62,8 @@ void SocketHandler::start() {
 
   while (connect(clientSocket, (struct sockaddr*)&serverAddress,
 		 sizeof(serverAddress)) != 0) {
-    cout << "Error during connection. Try again in 2 seconds" << endl; 
-    sleep(3);
+    cout << "Error during connection" << endl;
+    std::this_thread::sleep_for(std::chrono::seconds(1));    
   }
 
   while(true) {    
@@ -93,7 +73,6 @@ void SocketHandler::start() {
 
     q = send(clientSocket, packet.c_str(), packet.length() + 1, MSG_NOSIGNAL);
     if (q == -1) {
-      fprintf(stderr, "connection is lost");
       goto reconnect;
     } 
   }
