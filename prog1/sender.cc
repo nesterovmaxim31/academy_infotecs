@@ -42,14 +42,26 @@ void Sender::buffer_load() {
 
 void Sender::parse_string() {
   int value;
+  bool flag; 
   
   for(string::iterator it = str.begin(); it != str.end(); it++) {
     value = ranges::count(str, *it);
-    pairs.push_back({value, *it});
-  }
-  
-}
 
+    flag = true;
+
+    for(vector<pair<int, char>>::iterator itv = pairs.begin();\
+	itv != pairs.end(); itv++) {
+      if((*itv).second  == *it) {
+	flag = false;
+	break;
+      }
+    }
+
+    if (flag)      
+      pairs.push_back({value, *it});
+      
+  }
+}
 
 void Sender::start() {
   while(true) {
