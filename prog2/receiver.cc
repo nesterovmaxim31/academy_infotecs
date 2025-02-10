@@ -10,8 +10,31 @@
 
 using namespace std;
 
-void Receiver::output_data() {
-  
+inline bool is_return(const char& input)
+{
+    return input == '\n' || input == '\r';
+}
+
+string last_line (const string& input)
+{
+    if(input.length() == 1) return input;
+    size_t position = input.length()-2; // last character might be a return character, we can jump over it anyway
+    while((not is_return(input[position])) and position > 0) position--;
+    // now we are at the \n just before the last line, or at the first character of the string
+    if(is_return(input[position])) position += 1;
+    // now we are at the beginning of the last line
+
+    return input.substr(position);
+}
+
+void Receiver::print_buffer() {
+  if(newly_created) {
+    cout << buffer;
+    newly_created = false;
+  }
+  else {
+    cout << last_line(buffer);
+  }
 }
 
 
@@ -36,18 +59,17 @@ void Receiver::get_packet() {
   if (clientSocket == -1) {
     cout << "Error during connection. Try adain in 3 seconds" << endl;
     sleep(3);
-    // goto connection;
   }
 
   cout << "connection  succesfull" << endl;
-  char buffer[1024] = { 0 };
+
 
   int q;
   
   while (true) {
     q = recv(clientSocket, buffer, sizeof(buffer), 0);
     if(q != 0) {
-      cout << "Message from client: " << buffer << endl;
+      this->print_buffer();
       bzero(buffer, sizeof(buffer));
     }
     else
@@ -61,6 +83,5 @@ void Receiver::get_packet() {
 void Receiver::start() {
   while(true) {
     this->get_packet();
-    this->output_data();
   }
 }

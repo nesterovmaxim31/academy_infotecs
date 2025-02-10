@@ -47,9 +47,9 @@ void Sender::parse_string() {
     value = ranges::count(str, *it);
     pairs.push_back({value, *it});
   }
-
-  pairs.erase(unique(pairs.begin(), pairs.end()), pairs.end());
   sort(pairs.begin(), pairs.end());  
+  pairs.erase(unique(pairs.begin(), pairs.end()), pairs.end());
+
 }
 
 

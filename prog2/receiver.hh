@@ -4,12 +4,14 @@
 
 class Receiver {
   const int PORT = 8080;
-  
+  char buffer[1024];
+  bool newly_created;
 
   void get_packet();
-  void output_data();
+  void print_buffer();
 
 public:
+  Receiver() : newly_created(true) {};
   void start();
 };
 

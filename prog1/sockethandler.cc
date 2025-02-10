@@ -15,14 +15,15 @@ void SocketHandler::buffer_unload() {
   pair<int, char> el;
   el = parent.buffer.front();
   
+  
   while(el.first != -1 && !parent.buffer.empty()) {
     parent.buffer.pop();
-    packet += " " + to_string(el.first) + " " + el.second;
+    packet += to_string(el.first) + " " + el.second + "; ";
     el = parent.buffer.front();
 
   }
 
-  packet += "\n\0";
+  packet += "\n";
 }
 
 void SocketHandler::send_packet() {  
