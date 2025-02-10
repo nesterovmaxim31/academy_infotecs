@@ -47,9 +47,9 @@ void Sender::parse_string() {
     value = ranges::count(str, *it);
     pairs.push_back({value, *it});
   }
+  
   sort(pairs.begin(), pairs.end());  
   pairs.erase(unique(pairs.begin(), pairs.end()), pairs.end());
-
 }
 
 
@@ -63,9 +63,9 @@ void Sender::start() {
     }
     else {
       fprintf(stderr, "String doesn't math rules\n");
+      continue;
     }
 
-    cout << "String is handled and sent to buffer" << endl;
     parent.sync_point.arrive_and_wait();
   }
 }

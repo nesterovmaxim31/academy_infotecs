@@ -7,7 +7,8 @@ class SocketHandler {
   Main &parent;
   const int PORT = 8080;
   std::string packet;
-   
+
+  void print_queue();
   void buffer_unload();
   void send_packet();
   
