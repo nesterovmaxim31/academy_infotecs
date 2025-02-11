@@ -11,9 +11,9 @@
 
 using namespace std;
 
-
+/* Парсинг полученного сообщения, сортировка символов и вывод в консоль */
 void Receiver::print_buffer() {
-  string str;
+  string str, str_;
   int value;
   char c;
 
@@ -21,28 +21,28 @@ void Receiver::print_buffer() {
 
   stringstream s(str);
   for(size_t i = 0; i < count(str.begin(), str.end(), '\n'); i++) {
-  s >> value;
-  s >> c;
-
-  cout << str << endl;
-  do {
-    pairs.push_back({value, c});
     s >> value;
     s >> c;
-  } while(value != -1);
-  
-  sort(pairs.begin(), pairs.end());  
 
-  cout << endl << "The entered string consists of these characters: " << endl;
-  for(vector<pair<int, char>>::iterator it = pairs.begin(); \
-      it != pairs.end(); it++) {    
-    cout << "Character: " << (*it).second << ", amount: " << (*it).first << endl;
+    do {
+      pairs.push_back({value, c});
+      s >> value;
+      s >> c;
+    } while(value != -1);
+  
+    sort(pairs.begin(), pairs.end());  
+
+    cout << endl << "The entered string consists of these characters: " << endl;
+    for(vector<pair<int, char>>::iterator it = pairs.begin(); \
+	it != pairs.end(); it++) {    
+      cout << "Character: " << (*it).second << ", amount: " << (*it).first << endl;
+    }
+    pairs.clear();
   }
-  }
-  pairs.clear();
+  
 }
 
-
+/* Получение информации от первой программы через сокет */
 void Receiver::get_packet() {
   int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
   int clientSocket, q;
@@ -76,13 +76,14 @@ void Receiver::get_packet() {
       bzero(buffer, sizeof(buffer));
     }
     else
+      /* Потеря соединения */
       goto reconnect;
   }
 
   close(serverSocket);
 }
 
-
+/* Запуск второй программы */ 
 void Receiver::start() {
   while(true) {
     this->get_packet();

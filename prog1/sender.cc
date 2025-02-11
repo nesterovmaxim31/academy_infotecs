@@ -9,11 +9,12 @@
 
 using namespace std;
 
+/* Получение строки от пользователя из терминала */
 void Sender::get_string() {
   getline(cin, str);
 }
 
-
+/* Проверка строки на соотвествие правилам */
 bool Sender::is_valid() {
   if (str.length() > 64)
     return false;
@@ -27,7 +28,8 @@ bool Sender::is_valid() {
   return true;
 }
 
-
+/* Загрузка в буффер множества всех символов и количества
+   их повторений в введённой строке */
 void Sender::buffer_load() {
   for(vector<pair<int, char>>::iterator it = pairs.begin(); \
       it != pairs.end(); it++) {
@@ -37,7 +39,7 @@ void Sender::buffer_load() {
   pairs.clear();
 }
 
-
+/* Разбитие строки на символы и подсчёт количества их вхождения */
 void Sender::parse_string() {
   int value;
   bool flag; 
@@ -60,7 +62,7 @@ void Sender::parse_string() {
   }
 }
 
-
+/* Запуск первого потока первой программы */
 void Sender::start() {
   while(true) {
     this->get_string();
@@ -74,6 +76,7 @@ void Sender::start() {
       continue;
     }
 
-    parent.sync_point.arrive_and_wait();
+    // parent.sync_point.arrive_and_wait();
+    parent.sync_point.arrive_and_drop();
   }
 }
