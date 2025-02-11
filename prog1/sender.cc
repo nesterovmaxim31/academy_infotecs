@@ -76,7 +76,6 @@ void Sender::start() {
       continue;
     }
 
-    // parent.sync_point.arrive_and_wait();
-    parent.sync_point.arrive_and_drop();
+    parent.sync_point.arrive_and_wait();
   }
 }

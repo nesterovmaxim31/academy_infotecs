@@ -13,7 +13,7 @@ using namespace std;
 
 /* Вывод полученных данных от первого потока */
 void SocketHandler::print_queue() {
-  cout << "The entered string consists of these characters:" << endl;
+  cout << endl <<"The entered string consists of these characters:" << endl;
   
   for(vector<pair<int, char>>::iterator it = pairs.begin();\
       it != pairs.end(); it++) {
@@ -61,12 +61,11 @@ void SocketHandler::start() {
   serverAddress.sin_port = htons(PORT);
   serverAddress.sin_addr.s_addr = INADDR_ANY;
 
-
+  /* Ожидание подключения второй программы (ввод пользователь
+     может продолжать, когда сокет подключиться, из буфера будет
+     считана вся накопившеейся информация и обработана) */ 
   while (connect(clientSocket, (struct sockaddr*)&serverAddress,
-		 sizeof(serverAddress)) != 0) {
-    // cout << "Error during connection" << endl;
-    // std::this_thread::sleep_for(std::chrono::seconds(1));    
-  }
+		 sizeof(serverAddress)) != 0) {}
 
   while(true) {    
     parent.sync_point.arrive_and_wait();
