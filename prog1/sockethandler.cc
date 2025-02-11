@@ -11,6 +11,7 @@
 
 using namespace std;
 
+/* Вывод полученных данных от первого потока */
 void SocketHandler::print_queue() {
   cout << "The entered string consists of these characters:" << endl;
   
@@ -21,7 +22,8 @@ void SocketHandler::print_queue() {
   }
 }
 
-
+/* Выгрузка из общего буфера первой программы в вектор для вывода
+   в консоль полученных символов и формирования строки для отправки по сокету */
 void SocketHandler::buffer_unload() {
   pairs.clear();
   
@@ -44,10 +46,10 @@ void SocketHandler::buffer_unload() {
   }
 
   pairs.clear();
-  packet += "-1 -1\n";
+  packet += "-1 0\n";
 }
 
-
+// Запуск второго потока первой программы
 void SocketHandler::start() {
   int q, clientSocket;
   sockaddr_in serverAddress;
@@ -62,8 +64,8 @@ void SocketHandler::start() {
 
   while (connect(clientSocket, (struct sockaddr*)&serverAddress,
 		 sizeof(serverAddress)) != 0) {
-    cout << "Error during connection" << endl;
-    std::this_thread::sleep_for(std::chrono::seconds(1));    
+    // cout << "Error during connection" << endl;
+    // std::this_thread::sleep_for(std::chrono::seconds(1));    
   }
 
   while(true) {    
@@ -73,8 +75,11 @@ void SocketHandler::start() {
 
     q = send(clientSocket, packet.c_str(), packet.length() + 1, MSG_NOSIGNAL);
     if (q == -1) {
+      /* Попытка переподключения при потери соединения со второй программой */
       goto reconnect;
-    } 
+    }
+
+    packet.clear();
   }
 
   close(clientSocket);

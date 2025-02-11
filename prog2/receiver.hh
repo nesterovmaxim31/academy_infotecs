@@ -9,7 +9,6 @@ class Receiver {
   char buffer[1024];
   bool newly_created;
   std::vector<std::pair<int, char>> pairs;
-  
 
   void get_packet();
   void print_buffer();

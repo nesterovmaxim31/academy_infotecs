@@ -10,6 +10,7 @@ class Main {
 public:
   std::barrier<> sync_point;
   std::queue<std::pair<int, char>> buffer;
+
   Main() : sync_point(2) {}
 };
 

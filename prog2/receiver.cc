@@ -11,50 +11,26 @@
 
 using namespace std;
 
-bool is_return(const char& input) {
-  return input == '\n' || input == '\r';
-}
-
-
-string last_line (const string& input) {
-  if(input.length() == 1)
-    return input;
-
-  size_t position = input.length()-2;
-    
-  while((not is_return(input[position])) and position > 0)
-    position--;
-
-  if(is_return(input[position]))
-    position += 1;
-
-  return input.substr(position);
-}
-
 
 void Receiver::print_buffer() {
   string str;
   int value;
   char c;
-  
-  if(newly_created) {
-    str = buffer;
-    newly_created = false;
-  }
-  else {
-    str = last_line(buffer);
-  }
 
-  stringstream s(str);  
+  str = buffer;
+
+  stringstream s(str);
+  for(size_t i = 0; i < count(str.begin(), str.end(), '\n'); i++) {
   s >> value;
   s >> c;
-  
+
+  cout << str << endl;
   do {
     pairs.push_back({value, c});
     s >> value;
     s >> c;
   } while(value != -1);
-
+  
   sort(pairs.begin(), pairs.end());  
 
   cout << endl << "The entered string consists of these characters: " << endl;
@@ -62,7 +38,7 @@ void Receiver::print_buffer() {
       it != pairs.end(); it++) {    
     cout << "Character: " << (*it).second << ", amount: " << (*it).first << endl;
   }
-
+  }
   pairs.clear();
 }
 

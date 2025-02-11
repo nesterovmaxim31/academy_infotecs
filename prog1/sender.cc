@@ -10,7 +10,6 @@
 using namespace std;
 
 void Sender::get_string() {
-  cout << "Enter a string: " << endl;
   getline(cin, str);
 }
 

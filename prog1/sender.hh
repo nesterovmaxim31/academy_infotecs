@@ -14,12 +14,13 @@ class Sender{
 
   void get_string();
   bool is_valid();
-  void parse_string();
   void buffer_load();
+  void parse_string();
 
 public:
-  Sender(Main &parent_) : parent(parent_) {};
+  Sender(Main &parent_) : parent(parent_), pairs(0) {};
   void start();
 };
+
 
 #endif
